@@ -29,8 +29,8 @@ function loadDynamicAds() {
             adDiv.innerHTML = `
                 <ins class="adsbygoogle"
                      style="display:block"
-                     data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-                     data-ad-slot="XXXXXXXXXX"
+                     data-ad-client="ca-pub-1124189530068635"
+                     data-ad-slot="1234567890"
                      data-ad-format="auto"></ins>
                 <script>
                      (adsbygoogle = window.adsbygoogle || []).push({});
