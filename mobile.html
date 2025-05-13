@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Ad Testing Page</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+            padding-bottom: 70px; /* Space for fixed banner */
+        }
+        
+        header {
+            background-color: #35424a;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .container {
+            width: 95%;
+            margin: 15px auto;
+        }
+        
+        section {
+            background: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        /* Ad Styling */
+        .ad-unit {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 15px 0;
+            text-align: center;
+            position: relative;
+            min-height: 100px;
+        }
+        
+        .ad-unit::before {
+            content: "Advertisement";
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ccc;
+            color: #666;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 3px;
+        }
+        
+        /* Interstitial */
+        .interstitial {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .interstitial-content {
+            position: relative;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            width: 90%;
+            max-width: 350px;
+            text-align: center;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            font-size: 20px;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .ad-content h3 {
+            color: #e74c3c;
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: #e74c3c;
+            color: white;
+            padding: 10px 20px;
+            margin-top: 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        /* Fixed Banner */
+        .fixed-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #f1f1f1;
+            border-top: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+            z-index: 100;
+        }
+        
+        /* Expandable Ad */
+        .expandable-ad {
+            height: 60px;
+            overflow: hidden;
+            transition: height 0.3s ease;
+            position: relative;
+        }
+        
+        .expandable-ad.expanded {
+            height: 250px;
+        }
+        
+        .expand-toggle {
+            position: absolute;
+            right: 10px;
+            bottom: 10px;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        
+        /* App install banner */
+        .app-install {
+            display: flex;
+            align-items: center;
+            background: #e8f4ff;
+            border: 1px solid #c2e0ff;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        
+        .app-icon {
+            width: 50px;
+            height: 50px;
+            background: #0080ff;
+            border-radius: 10px;
+            margin-right: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .app-details {
+            flex: 1;
+        }
+        
+        .app-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .app-rating {
+            color: gold;
+        }
+        
+        .install-btn {
+            background: #0080ff;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 15px;
+            color: #666;
+            font-size: 12px;
+        }
+    </style>
+
+    <!-- Google AdMob -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+    
+    <!-- Facebook Pixel -->
+    <script>
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '000000000000000');
+        fbq('track', 'PageView');
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Mobile Ad Testing</h1>
+        <p>Test various mobile ad formats</p>
+    </header>
+    
+    <div class="container">
+        <!-- App Install Banner -->
+        <div class="app-install">
+            <div class="app-icon">App</div>
+            <div class="app-details">
+                <div class="app-name">Test App</div>
+                <div class="app-rating">★★★★★</div>
+                <div class="app-desc">Try our awesome app now!</div>
+            </div>
+            <button class="install-btn">Install</button>
+        </div>
+        
+        <section>
+            <h2>Mobile Ad Formats</h2>
+            <p>This page demonstrates common mobile ad formats for testing ad blockers on mobile devices.</p>
+            
+            <!-- AdMob Banner -->
+            <div class="ad-unit">
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                     data-ad-slot="XXXXXXXXXX"
+                     data-ad-format="auto"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+            
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula.</p>
+            
+            <!-- Expandable Ad -->
+            <div class="expandable-ad" id="expandable">
+                <div class="ad-unit">
+                    <p>Expandable Ad Unit</p>
+                    <p class="expanded-content" style="display:none">
+                        This is expanded content with more advertising material.
+                        <br><br>
+                        <a href="#" class="cta-button">Learn More</a>
+                    </p>
+                </div>
+                <button class="expand-toggle" onclick="toggleExpand()">Expand</button>
+            </div>
+            
+            <p>Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor.</p>
+        </section>
+        
+        <!-- Native Ad Format -->
+        <section class="native-ad">
+            <h2>Recommended for You</h2>
+            <div style="display: flex; margin-top: 15px; border-bottom: 1px solid #eee; padding-bottom: 15px;">
+                <div style="width: 80px; height: 80px; background: #eee; margin-right: 10px;">
+                    <img src="data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2280%22%20height%3D%2280%22%20viewBox%3D%220%200%2080%2080%22%3E%3Crect%20fill%3D%22%23ddd%22%20width%3D%2280%22%20height%3D%2280%22%2F%3E%3Ctext%20fill%3D%22%23aaa%22%20font-family%3D%22Arial%2CVerdana%2CHelvetica%22%20font-size%3D%2210%22%20x%3D%2225%22%20y%3D%2244%22%3EIMG%3C%2Ftext%3E%3C%2Fsvg%3E" width="80" height="80">
+                </div>
+                <div>
+                    <h3 style="margin: 0 0 5px; font-size: 16px;">Amazing Product</h3>
+                    <p style="margin: 0 0 5px; font-size: 14px; color: #777;">You won't believe what this product can do!</p>
+                    <span style="background: #eee; color: #777; font-size: 12px; padding: 2px 5px;">Sponsored</span>
+                </div>
+            </div>
+            <div style="display: flex; margin-top: 15px;">
+                <div style="width: 80px; height: 80px; background: #eee; margin-right: 10px;">
+                    <img src="data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2280%22%20height%3D%2280%22%20viewBox%3D%220%200%2080%2080%22%3E%3Crect%20fill%3D%22%23ddd%22%20width%3D%2280%22%20height%3D%2280%22%2F%3E%3Ctext%20fill%3D%22%23aaa%22%20font-family%3D%22Arial%2CVerdana%2CHelvetica%22%20font-size%3D%2210%22%20x%3D%2225%22%20y%3D%2244%22%3EIMG%3C%2Ftext%3E%3C%2Fsvg%3E" width="80" height="80">
+                </div>
+                <div>
+                    <h3 style="margin: 0 0 5px; font-size: 16px;">Limited Offer</h3>
+                    <p style="margin: 0 0 5px; font-size: 14px; color: #777;">Special discount just for mobile users!</p>
+                    <span style="background: #eee; color: #777; font-size: 12px; padding: 2px 5px;">Ad</span>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <!-- Fixed Banner Ad -->
+    <div class="fixed-banner">
+        <ins class="adsbygoogle"
+             style="display:inline-block;width:320px;height:50px"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+             data-ad-slot="XXXXXXXXXX"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+    
+    <!-- Interstitial Ad -->
+    <div id="mobile-interstitial" class="interstitial">
+        <div class="interstitial-content">
+            <div class="close-btn" onclick="closeInterstitial()">×</div>
+            <div class="ad-content">
+                <h3>Special Offer!</h3>
+                <p>Get 50% off today only!</p>
+                <a href="#" class="cta-button">Shop Now</a>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2023 Mobile Ad Testing Page</p>
+    </footer>
+    
+    <script>
+        // Show interstitial after 3 seconds
+        setTimeout(function() {
+            document.getElementById('mobile-interstitial').style.display = 'flex';
+        }, 3000);
+        
+        function closeInterstitial() {
+            document.getElementById('mobile-interstitial').style.display = 'none';
+        }
+        
+        function toggleExpand() {
+            const expandable = document.getElementById('expandable');
+            const expandedContent = document.querySelector('.expanded-content');
+            const button = document.querySelector('.expand-toggle');
+            
+            if (expandable.classList.contains('expanded')) {
+                expandable.classList.remove('expanded');
+                expandedContent.style.display = 'none';
+                button.textContent = 'Expand';
+            } else {
+                expandable.classList.add('expanded');
+                expandedContent.style.display = 'block';
+                button.textContent = 'Collapse';
+            }
+        }
+        
+        // Set tracking cookies
+        document.cookie = "user_id=123456789; expires=Fri, 31 Dec 2099 23:59:59 GMT; path=/";
+        document.cookie = "session_id=" + Math.random().toString(36).substring(2) + "; path=/";
+        document.cookie = "mobile_user=true; path=/";
+        
+        // Tracking pixels
+        const trackingPixels = [
+            'https://example.com/mobile-tracking1.gif',
+            'https://example.com/mobile-tracking2.gif'
+        ];
+        
+        trackingPixels.forEach(url => {
+            const img = document.createElement('img');
+            img.src = url;
+            img.style.position = 'absolute';
+            img.style.width = '1px';
+            img.style.height = '1px';
+            img.style.opacity = '0';
+            document.body.appendChild(img);
+        });
+    </script>
+</body>
+</html> 
